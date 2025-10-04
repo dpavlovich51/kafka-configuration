@@ -15,20 +15,42 @@ services:
       - "9093:9093"
       - "29092:29092"
     environment:
+      # NODE_ID this is id for kafka cluster, it's managed by kafka itself (controller)
       KAFKA_NODE_ID: 1
+      # BROKER_ID this is id to connect or manage brokers by client (UI, CLI, etc.)
       KAFKA_BROKER_ID: 1
+      # Node roles in the node. It can be broker, controller or both.
+      # Controller - role is responsible for managing the cluster metadata and partition assignments.
+      # Broker - role is responsible for handling client requests and data storage.
       KAFKA_PROCESS_ROLES: 'broker,controller'
+      # Quorum voters for the controller nodes in the cluster to decide who will be a leader.
+      # Format: <node_id>@<hostname>:<port> = 1@kafka1:9093 
+      # Responsibilities of leader node: 
+      # * managing partition assignments;
+      # * handling metadata requests;
+      # * coordinating with other brokers;
       KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093,3@kafka3:9093'
+      # Declare listeners and their addresses to listen on.
       KAFKA_LISTENERS: 'PLAINTEXT://kafka1:9092,CONTROLLER://kafka1:9093,EXTERNAL://0.0.0.0:29092'
+      # Advertised listeners to be used by clients to connect to the broker.
       KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka1:9092,EXTERNAL://localhost:29092'
+      # Map listener names to security protocols.
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT'
+      # Listener name for inter-broker communication.
       KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      # Listener name for inter-broker communication to make replicaition between brokers.
       KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+      # Custer ID, It must be the same for all nodes in the cluster.
       CLUSTER_ID: "gORJVbjpRpGiOZQr3xLUoA"
+      # It specifies the number of replicas for the metadata (__consumer_offsets topic).
+      # How many nodes will have a copy of this topic.
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      # The default replication factor for automatically created topics.
       KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      # The minimum number of replicas that must acknowledge a write for the write to be considered successful.
       KAFKA_MIN_INSYNC_REPLICAS: 2
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      # If true the broker will automatically  create a topic when client attempts to produce or consume from a non-existent topic.
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
     volumes:
       - ./kafka1/data:/var/lib/kafka/data
     networks:
@@ -57,7 +79,7 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
       KAFKA_DEFAULT_REPLICATION_FACTOR: 3
       KAFKA_MIN_INSYNC_REPLICAS: 2
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
     volumes:
       - ./kafka2/data:/var/lib/kafka/data
     networks:
@@ -88,7 +110,7 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
       KAFKA_DEFAULT_REPLICATION_FACTOR: 3
       KAFKA_MIN_INSYNC_REPLICAS: 2
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
     volumes:
       - ./kafka3/data:/var/lib/kafka/data
     networks:
