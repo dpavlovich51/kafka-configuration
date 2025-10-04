@@ -11,9 +11,9 @@ services:
     container_name: kafka1
     hostname: kafka1
     ports:
-      - "9092:9092"
-      - "9093:9093"
-      - "29092:29092"
+      - "9092:9092" # Internail broker communication. Do not expose it to outside world.
+      - "9093:9093" # Internal controller communication. Do not expose it to outside world.
+      - "29092:29092" # External protected with TSL communication port for clients.
     environment:
       # NODE_ID this is id for kafka cluster, it's managed by kafka itself (controller)
       KAFKA_NODE_ID: 1
@@ -31,11 +31,11 @@ services:
       # * coordinating with other brokers;
       KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093,3@kafka3:9093'
       # Declare listeners and their addresses to listen on.
-      KAFKA_LISTENERS: 'PLAINTEXT://kafka1:9092,CONTROLLER://kafka1:9093,EXTERNAL://0.0.0.0:29092'
+      KAFKA_LISTENERS: 'PLAINTEXT://kafka1:9092,CONTROLLER://kafka1:9093,EXTERNAL_SSL://0.0.0.0:29092'
       # Advertised listeners to be used by clients to connect to the broker.
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka1:9092,EXTERNAL://localhost:29092'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka1:9092,EXTERNAL_SSL://localhost:29092'
       # Map listener names to security protocols.
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,EXTERNAL_SSL:SSL'
       # Listener name for inter-broker communication.
       KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
       # Listener name for inter-broker communication to make replicaition between brokers.
@@ -51,6 +51,12 @@ services:
       KAFKA_MIN_INSYNC_REPLICAS: 2
       # If true the broker will automatically  create a topic when client attempts to produce or consume from a non-existent topic.
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+      # ============= SSL CONFIGURATION =============
+      KAFKA_SSL_KEYSTORE_LOCATION: /var/private/ssl/kafka.keystore.jks
+      KAFKA_SSL_KEYSTORE_PASSWORD: mykeystorepass
+      KAFKA_SSL_TRUSTSTORE_LOCATION: /var/private/ssl/kafka.truststore.jks
+      KAFKA_SSL_TRUSTSTORE_PASSWORD: mytrustpass
+      KAFKA_SSL_CLIENT_AUTH: required
     volumes:
       - ./kafka1/data:/var/lib/kafka/data
     networks:
