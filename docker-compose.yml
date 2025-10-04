@@ -52,12 +52,14 @@ services:
       # If true the broker will automatically  create a topic when client attempts to produce or consume from a non-existent topic.
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
       # ============= SSL CONFIGURATION =============
-      KAFKA_SSL_KEYSTORE_LOCATION: /var/private/ssl/kafka.keystore.jks
-      KAFKA_SSL_KEYSTORE_PASSWORD: mykeystorepass
-      KAFKA_SSL_TRUSTSTORE_LOCATION: /var/private/ssl/kafka.truststore.jks
-      KAFKA_SSL_TRUSTSTORE_PASSWORD: mytrustpass
+      KAFKA_SSL_KEYSTORE_FILENAME: kafka.keystore.jks
+      KAFKA_SSL_TRUSTSTORE_FILENAME: kafka.truststore.jks
+      KAFKA_SSL_KEY_CREDENTIALS: key-creds
+      KAFKA_SSL_KEYSTORE_CREDENTIALS: key-creds
+      KAFKA_SSL_TRUSTSTORE_CREDENTIALS: key-creds
       KAFKA_SSL_CLIENT_AUTH: required
     volumes:
+      - ./tsl:/etc/kafka/secrets
       - ./kafka1/data:/var/lib/kafka/data
     networks:
       - kafka-net
@@ -76,9 +78,9 @@ services:
       KAFKA_BROKER_ID: 2
       KAFKA_PROCESS_ROLES: 'broker,controller'
       KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093,3@kafka3:9093'
-      KAFKA_LISTENERS: 'PLAINTEXT://kafka2:9092,CONTROLLER://kafka2:9093,EXTERNAL://0.0.0.0:29092'
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka2:9092,EXTERNAL://localhost:29093'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT'
+      KAFKA_LISTENERS: 'PLAINTEXT://kafka2:9092,CONTROLLER://kafka2:9093,EXTERNAL_SSL://0.0.0.0:29092'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka2:9092,EXTERNAL_SSL://localhost:29093'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,EXTERNAL_SSL:SSL'
       KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
       KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
       CLUSTER_ID: "gORJVbjpRpGiOZQr3xLUoA"
@@ -86,7 +88,15 @@ services:
       KAFKA_DEFAULT_REPLICATION_FACTOR: 3
       KAFKA_MIN_INSYNC_REPLICAS: 2
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+      # ============= SSL CONFIGURATION =============
+      KAFKA_SSL_KEYSTORE_FILENAME: kafka.keystore.jks
+      KAFKA_SSL_TRUSTSTORE_FILENAME: kafka.truststore.jks
+      KAFKA_SSL_KEY_CREDENTIALS: key-creds
+      KAFKA_SSL_KEYSTORE_CREDENTIALS: key-creds
+      KAFKA_SSL_TRUSTSTORE_CREDENTIALS: key-creds
+      KAFKA_SSL_CLIENT_AUTH: required
     volumes:
+      - ./tsl:/etc/kafka/secrets
       - ./kafka2/data:/var/lib/kafka/data
     networks:
       - kafka-net
@@ -107,9 +117,9 @@ services:
       KAFKA_BROKER_ID: 3
       KAFKA_PROCESS_ROLES: 'broker,controller'
       KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093,3@kafka3:9093'
-      KAFKA_LISTENERS: 'PLAINTEXT://kafka3:9092,CONTROLLER://kafka3:9093,EXTERNAL://0.0.0.0:29092'
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka3:9092,EXTERNAL://localhost:29094'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT'
+      KAFKA_LISTENERS: 'PLAINTEXT://kafka3:9092,CONTROLLER://kafka3:9093,EXTERNAL_SSL://0.0.0.0:29092'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka3:9092,EXTERNAL_SSL://localhost:29094'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,EXTERNAL_SSL:SSL'
       KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
       KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
       CLUSTER_ID: "gORJVbjpRpGiOZQr3xLUoA"
@@ -117,7 +127,15 @@ services:
       KAFKA_DEFAULT_REPLICATION_FACTOR: 3
       KAFKA_MIN_INSYNC_REPLICAS: 2
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+      # ============= SSL CONFIGURATION =============
+      KAFKA_SSL_KEYSTORE_FILENAME: kafka.keystore.jks
+      KAFKA_SSL_TRUSTSTORE_FILENAME: kafka.truststore.jks
+      KAFKA_SSL_KEY_CREDENTIALS: key-creds
+      KAFKA_SSL_KEYSTORE_CREDENTIALS: key-creds
+      KAFKA_SSL_TRUSTSTORE_CREDENTIALS: key-creds
+      KAFKA_SSL_CLIENT_AUTH: required
     volumes:
+      - ./tsl:/etc/kafka/secrets
       - ./kafka3/data:/var/lib/kafka/data
     networks:
       - kafka-net

@@ -7,6 +7,7 @@ for i in $(seq 1 $1); do
 done
 
 echo "Add grants to kafka folders."
-ls -d */ | while read folder; do sudo chmod -R 755 "$folder"; done
+ls -d */ | while read folder; do sudo chmod -R 777 "$folder"; done
+ls -d */ | while read folder; do sudo chown -R 1000:1000 "$folder"; done
 
 echo "Setup is done."
