@@ -13,7 +13,7 @@ services:
     ports:
       - "9092:9092" # Internail broker communication. Do not expose it to outside world.
       - "9093:9093" # Internal controller communication. Do not expose it to outside world.
-      - "29092:29092" # External protected with TSL communication port for clients.
+      - "29092:29092" # External protected with TLS communication port for clients.
     environment:
       # NODE_ID this is id for kafka cluster, it's managed by kafka itself (controller)
       KAFKA_NODE_ID: 1
@@ -59,7 +59,7 @@ services:
       KAFKA_SSL_TRUSTSTORE_CREDENTIALS: key-creds
       KAFKA_SSL_CLIENT_AUTH: required
     volumes:
-      - ./tsl:/etc/kafka/secrets
+      - ./tls:/etc/kafka/secrets
       - ./kafka1/data:/var/lib/kafka/data
     networks:
       - kafka-net
@@ -96,7 +96,7 @@ services:
       KAFKA_SSL_TRUSTSTORE_CREDENTIALS: key-creds
       KAFKA_SSL_CLIENT_AUTH: required
     volumes:
-      - ./tsl:/etc/kafka/secrets
+      - ./tls:/etc/kafka/secrets
       - ./kafka2/data:/var/lib/kafka/data
     networks:
       - kafka-net
@@ -135,7 +135,7 @@ services:
       KAFKA_SSL_TRUSTSTORE_CREDENTIALS: key-creds
       KAFKA_SSL_CLIENT_AUTH: required
     volumes:
-      - ./tsl:/etc/kafka/secrets
+      - ./tls:/etc/kafka/secrets
       - ./kafka3/data:/var/lib/kafka/data
     networks:
       - kafka-net

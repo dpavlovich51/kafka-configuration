@@ -1,6 +1,6 @@
 
 ``` bash 
-./tsl/
+./tls/
 ├── ca.crt                  # Публичный ключ (Корневой сертификат (CA) ✅)
 ├── ca.key                  # Приватный ключ CA (держим в секрете) 
 ├── kafka.csr               # Сертификат брокера (подписан CA) ✅
@@ -12,7 +12,7 @@
 
 For generating these files - just run script
 ``` bash 
-sh run_all_scripts.sh tsl <passkey>
+sh run_all_scripts.sh tls <passkey>
 ```
 
 ``` bash 
