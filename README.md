@@ -19,3 +19,8 @@ sh run_all_scripts.sh tls <passkey>
 ca.crt - used to add public (whom is signing) inforation for signed certificate (public key)
 ca.key - used to sign certificate 
 ```
+
+clean all data connected with kafka and certificates
+``` bash 
+sudo rm -rf kafka{1..3} tls
+```

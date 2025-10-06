@@ -7,7 +7,10 @@ if [ -z "$2" ] || [ -z "$1" ]; then
     exit 1
 fi
 # Sign the client CSR with the CA certificate and private key
-openssl x509 -req -in "$2/client.csr.pem" -CA "$1/ca.crt" -CAkey "$1/ca.key" \
-  -CAcreateserial -out "$2/client.cert.pem" -days 365 -sha256
+openssl x509 -req -in "$2/client.csr.pem" \
+  -CA "$1/ca.crt" -CAkey "$1/ca.key" \
+  -CAcreateserial -out "$2/client.cert.pem" \
+  -days 365 -sha256 \
+  -copy_extensions copyall
 
 echo "Client certificate signed and saved to $2/client.cert.pem"
