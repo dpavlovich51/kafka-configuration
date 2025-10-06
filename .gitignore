@@ -1,2 +1,8 @@
 **/kafka*
 **/tsl*
+
+*.pem
+*.jks
+*.csr
+*.crt
+*.log
